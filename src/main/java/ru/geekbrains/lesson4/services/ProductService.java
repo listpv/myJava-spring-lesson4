@@ -12,6 +12,9 @@ public interface ProductService {
     void remove(Product product);
     Product findByName(String name);
     Double findMaxPrice();
+    Double findMinPrice();
+    List<Product> findProductsByMaxPrice();
+    List<Product> findProductsByMinPrice();
     List<Product> findProductByPriceEquals(Double price);
 
 }

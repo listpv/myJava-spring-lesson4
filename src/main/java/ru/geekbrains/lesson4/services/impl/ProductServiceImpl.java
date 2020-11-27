@@ -56,6 +56,22 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Double findMinPrice() {
+        return productRepository.findMinPrice();
+    }
+
+    @Override
+    public List<Product> findProductsByMaxPrice() {
+        return productRepository.findProductsByMaxPrice();
+    }
+
+    @Override
+    public List<Product> findProductsByMinPrice() {
+        return productRepository.findProductsByMinPrice();
+    }
+
+
+    @Override
     @Transactional(readOnly = true)
     public List<Product> findProductByPriceEquals(Double price) {
        return productRepository.findProductByPriceEquals(price);

@@ -17,27 +17,17 @@ public class Catalog {
     @Column(name = "name")
     private String name;
 
-//    @OneToMany(mappedBy = "catalog", cascade = CascadeType.ALL)
-//    List<Product> products = new ArrayList<>();
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "products_catalogs",
-            joinColumns = @JoinColumn(name = "catalog_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
+    @OneToMany(
+            mappedBy = "catalog",
+            fetch = FetchType.EAGER
     )
-    List<Product> products = new ArrayList<>();
+    List<CatalogEntry> catalogEntries = new ArrayList<>();
 
     public Catalog(String name) {
         this.name = name;
     }
 
     public Catalog() {
-    }
-
-    public void addProduct(Product product){
-        this.products.add(product);
-        product.setCatalog(this);
     }
 
     public Long getId() {
@@ -56,12 +46,12 @@ public class Catalog {
         this.name = name;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public List<CatalogEntry> getCatalogEntries() {
+        return catalogEntries;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setCatalogEntries(List<CatalogEntry> catalogEntries) {
+        this.catalogEntries = catalogEntries;
     }
 
     @Override
@@ -70,21 +60,31 @@ public class Catalog {
         if (o == null || getClass() != o.getClass()) return false;
         Catalog catalog = (Catalog) o;
         return id.equals(catalog.id) &&
-                Objects.equals(name, catalog.name) &&
-                Objects.equals(products, catalog.products);
+                Objects.equals(name, catalog.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, products);
+        return Objects.hash(id, name);
     }
+
+//    @Override
+//    public String toString() {
+//        return "Catalog{" +
+//                "id=" + id +
+//                ", name='" + name + '\'' +
+//                ", catalogEntries=" + catalogEntries +
+//                '}';
+//    }
 
     @Override
     public String toString() {
         return "Catalog{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", products=" + products +
+                " " + catalogEntries +
                 '}';
     }
+
+
 }

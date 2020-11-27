@@ -20,22 +20,10 @@ public class Product {
     @Column(name = "price")
     private Double price;
 
-//    @ManyToOne
-//    @JoinColumn(name = "catalog_id")
-//    private Catalog catalog;
-      @ManyToMany(cascade = CascadeType.ALL)
-      @JoinTable(
-        name = "products_catalogs",
-        joinColumns = @JoinColumn(name = "product_id"),
-        inverseJoinColumns = @JoinColumn(name = "catalog_id")
-)
-    List<Catalog> catalogs = new ArrayList<>();
-
     public Product(String name, Double price) {
         this.name = name;
         this.price = price;
     }
-
 
     public Product() {
     }
@@ -52,24 +40,16 @@ public class Product {
         return name;
     }
 
-    public Double getPrice() {
-        return price;
-    }
-
-//    public Catalog getCatalog() {
-//        return catalogs;
-//    }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public Double getPrice() {
+        return price;
     }
 
-    public void setCatalog(Catalog catalog) {
-        this.catalogs.add(catalog);
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     @Override
@@ -78,7 +58,7 @@ public class Product {
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
         return id.equals(product.id) &&
-                Objects.equals(name, product.name) &&
+                name.equals(product.name) &&
                 Objects.equals(price, product.price);
     }
 

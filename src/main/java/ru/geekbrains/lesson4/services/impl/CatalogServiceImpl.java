@@ -2,7 +2,9 @@ package ru.geekbrains.lesson4.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.geekbrains.lesson4.entity.Catalog;
+import ru.geekbrains.lesson4.entity.CatalogEntry;
 import ru.geekbrains.lesson4.entity.Product;
 import ru.geekbrains.lesson4.repositories.CatalogRepository;
 import ru.geekbrains.lesson4.services.CatalogService;
@@ -15,64 +17,119 @@ public class CatalogServiceImpl implements CatalogService {
 
     CatalogRepository catalogRepository;
 
+
     @Autowired
     public void setCatalogRepository(CatalogRepository catalogRepository) {
         this.catalogRepository = catalogRepository;
     }
 
+
     @Override
+    @Transactional(readOnly = true)
     public Catalog get(Long id) {
         return catalogRepository.getOne(id);
     }
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<Catalog> getAll() {
         return catalogRepository.findAll();
     }
 
     @Override
+    @Transactional
     public void save(Catalog catalog) {
         catalogRepository.save(catalog);
     }
 
     @Override
+    @Transactional
     public void remove(Catalog catalog) {
         catalogRepository.delete(catalog);
     }
 
-//    @Override
-//    public Long findMinPrise(Catalog catalog) {
-//        return catalogRepository.findMinPrice(catalog);
-//    }
-//
-//    @Override
-//    public Long findMaxPrise(Catalog catalog) {
-//        return catalogRepository.findMaxPrice(catalog);
-//    }
-
     @Override
-    public List<Catalog> findAllCatalogsByProduct(Product product) {
-        return catalogRepository.findAllCatalogsByProduct(product);
+    @Transactional(readOnly = true)
+    public List<CatalogEntry> findAllByName(String string) {
+        return catalogRepository.findAllByName(string);
     }
 
-//    @Override
-//    public List<Product> findProductByMinPrise(Catalog catalog) {
-//       return catalogRepository.findProductByPriceIs(findMinPrise(catalog));
-//    }
-//
-//    @Override
-//    public List<Product> findProductByMaxPrise(Catalog catalog) {
-//        return catalogRepository.findProductByPriceIs(findMaxPrise(catalog));
-//    }
-//
-//    @Override
-//    public List<Product> findProductByMaxAndMinPrice(Catalog catalog) {
-//        List<Product> distProducts = new ArrayList<>();
-//        distProducts.addAll(findProductByMinPrise(catalog));
-//        distProducts.addAll(findProductByMaxPrise(catalog));
-//        return distProducts;
-//    }
+    @Override
+    @Transactional(readOnly = true)
+    public List<CatalogEntry> findCatalogEntries(String name){
+        return catalogRepository.findCatalogEntries(name);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Double findMaxPriceFromCatalog(String name) {
+        List<CatalogEntry> catalogEntryList = findCatalogEntries(name);
+        Double price = 0.0;
+        for(CatalogEntry o : catalogEntryList){
+            Double tempPrice = o.getProduct().getPrice();
+            if(tempPrice > price){
+                price = tempPrice;
+            }
+        }
+        return price;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Double findMinPriceFromCatalog(String name) {
+        List<CatalogEntry> catalogEntryList = findCatalogEntries(name);
+        Double price = catalogEntryList.get(0).getProduct().getPrice();
+        for(CatalogEntry o : catalogEntryList){
+            Double tempPrice = o.getProduct().getPrice();
+            if(tempPrice < price){
+                price = tempPrice;
+            }
+        }
+        return price;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Double findMaxPriceInCatalog(String name) {
+        return catalogRepository.findMaxPriceInCatalog(name);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Double findMinPriceInCatalog(String name) {
+        return catalogRepository.findMinPriceInCatalog(name);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Catalog> findAll() {
+        return catalogRepository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Product> findProductsInCatalogWithMaxPrice(String name) {
+        return catalogRepository.findProductsInCatalogWithMaxPrice(name);
+    }
+
+    @Override
+    public List<Product> findProductsInCatalogWithMinPrice(String name) {
+        return catalogRepository.findProductsInCatalogWithMinPrice(name);
+    }
+
+    @Override
+    public List<Product> findProductsInCatalogWithMinAndMaxPrice(String name) {
+        return catalogRepository.findProductsInCatalogWithMinAndMaxPrice(name);
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Catalog> findCatalogsByProductsEquals(Product product) {
+        return catalogRepository.findCatalogsByProductEquals(product);
+    }
+
 
 
 }

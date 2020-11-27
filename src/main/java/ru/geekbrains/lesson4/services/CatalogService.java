@@ -1,7 +1,10 @@
 package ru.geekbrains.lesson4.services;
 
+import org.springframework.data.repository.query.Param;
 import ru.geekbrains.lesson4.entity.Catalog;
+import ru.geekbrains.lesson4.entity.CatalogEntry;
 import ru.geekbrains.lesson4.entity.Product;
+import ru.geekbrains.lesson4.repositories.CatalogRepository;
 
 import java.util.List;
 
@@ -12,14 +15,26 @@ public interface CatalogService {
     void save(Catalog catalog);
     void remove(Catalog catalog);
 
-//    Long findMinPrise(Catalog catalog);
-//    Long findMaxPrise(Catalog catalog);
+    List<CatalogEntry> findAllByName(String string);
 
-    List<Catalog> findAllCatalogsByProduct(Product product);
+    List<CatalogEntry> findCatalogEntries(String name);
 
-//    List<Product> findProductByMinPrise(Catalog catalog);
-//
-//    List<Product> findProductByMaxPrise(Catalog catalog);
-//
-//    List<Product> findProductByMaxAndMinPrice(Catalog catalog);
+    Double findMaxPriceFromCatalog(String name);
+
+    Double findMinPriceFromCatalog(String name);
+
+    Double findMaxPriceInCatalog(String name);
+
+    Double findMinPriceInCatalog(String name);
+
+    List<Catalog> findAll();
+
+    List<Product> findProductsInCatalogWithMaxPrice( String name);
+
+    List<Product> findProductsInCatalogWithMinPrice(String name);
+
+    List<Product> findProductsInCatalogWithMinAndMaxPrice(String name);
+
+
+    List<Catalog> findCatalogsByProductsEquals(Product product);
 }
