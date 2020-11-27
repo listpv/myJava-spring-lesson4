@@ -32,6 +32,10 @@ public interface CatalogRepository extends JpaRepository<Catalog, Long> {
 
     List<CatalogEntry> findAllByName(String string);
 
+    @Query("SELECT cp FROM Catalog c JOIN c.catalogEntries ce JOIN ce.product cp WHERE c.name = :name")
+    List<Product> findAllProductsFromCatalog(@Param("name") String name);
+
+
     @Query("SELECT catalogEntries FROM Catalog WHERE name = :name")
     List<CatalogEntry> findCatalogEntries(@Param("name") String name);
 

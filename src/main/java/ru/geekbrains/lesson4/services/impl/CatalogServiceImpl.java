@@ -123,6 +123,11 @@ public class CatalogServiceImpl implements CatalogService {
         return catalogRepository.findProductsInCatalogWithMinAndMaxPrice(name);
     }
 
+    @Override
+    public List<Product> findAllProductsFromCatalog(String name) {
+        return catalogRepository.findAllProductsFromCatalog(name);
+    }
+
 
     @Override
     @Transactional(readOnly = true)

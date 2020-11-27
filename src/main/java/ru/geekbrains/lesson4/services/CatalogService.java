@@ -35,6 +35,8 @@ public interface CatalogService {
 
     List<Product> findProductsInCatalogWithMinAndMaxPrice(String name);
 
+    List<Product> findAllProductsFromCatalog(String name);
+
 
     List<Catalog> findCatalogsByProductsEquals(Product product);
 }

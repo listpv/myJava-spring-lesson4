@@ -108,6 +108,10 @@ public class MainApp {
 //        Page<Product> productPage2 = productPaginationRepository.findAll(pageable2);
 //        System.out.println(productPage2);
 
+        // все продукты из одного каталога.
+        List<Product> products = catalogService.findAllProductsFromCatalog("Catalog4");
+        System.out.println("Products " + products);
+
         // максимальная ценой из общего списка.
         Double maxPrice = productService.findMaxPrice();
         System.out.println("MaxPrice is --- " + maxPrice);
