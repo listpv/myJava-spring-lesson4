@@ -15,7 +15,7 @@ import java.util.List;
 @Service("catalogService")
 public class CatalogServiceImpl implements CatalogService {
 
-    CatalogRepository catalogRepository;
+    private CatalogRepository catalogRepository;
 
 
     @Autowired
@@ -114,16 +114,19 @@ public class CatalogServiceImpl implements CatalogService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Product> findProductsInCatalogWithMinPrice(String name) {
         return catalogRepository.findProductsInCatalogWithMinPrice(name);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Product> findProductsInCatalogWithMinAndMaxPrice(String name) {
         return catalogRepository.findProductsInCatalogWithMinAndMaxPrice(name);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Product> findAllProductsFromCatalog(String name) {
         return catalogRepository.findAllProductsFromCatalog(name);
     }

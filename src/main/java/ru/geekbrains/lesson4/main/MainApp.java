@@ -8,8 +8,8 @@ import ru.geekbrains.lesson4.config.AppConfig;
 import ru.geekbrains.lesson4.entity.Catalog;
 import ru.geekbrains.lesson4.entity.Product;
 import ru.geekbrains.lesson4.repositories.CatalogPaginationRepository;
-import ru.geekbrains.lesson4.repositories.ProductPaginationRepository;
 import ru.geekbrains.lesson4.services.CatalogEntryService;
+import ru.geekbrains.lesson4.services.CatalogPaginationService;
 import ru.geekbrains.lesson4.services.CatalogService;
 import ru.geekbrains.lesson4.services.ProductService;
 
@@ -24,10 +24,10 @@ public class MainApp {
         CatalogService catalogService = applicationContext.getBean("catalogService", CatalogService.class);
         CatalogEntryService catalogEntryService =applicationContext.getBean("catalogEntryService", CatalogEntryService.class);
         ProductService productService = applicationContext.getBean("productService", ProductService.class);
-        CatalogPaginationRepository catalogPaginationRepository =
-                applicationContext.getBean("catalogPaginationRepository", CatalogPaginationRepository.class);
-        ProductPaginationRepository productPaginationRepository =
-                applicationContext.getBean("productPaginationRepository", ProductPaginationRepository.class);
+//        CatalogPaginationRepository catalogPaginationRepository =
+//                applicationContext.getBean("catalogPaginationRepository", CatalogPaginationRepository.class);
+        CatalogPaginationService catalogPaginationService =
+                applicationContext.getBean("catalogPaginationService", CatalogPaginationService.class);
 
 
         Product product1= new Product("product1", 10.0);
@@ -92,25 +92,38 @@ public class MainApp {
 
         //  все  каталоги с товарами постранично.
         Pageable pageable1 = PageRequest.of(0, 2);
-        Page<Catalog> catalogPage1 = catalogPaginationRepository.findAll(pageable1);
+        List<Catalog> catalogPage1 = catalogPaginationService.findAllCatalogs(pageable1);
+//        Page<Catalog> catalogPage1 = catalogPaginationRepository.findAll(pageable1);
+//        System.out.println(catalogPage1.getContent());
         Pageable pageable2 = PageRequest.of(1, 2);
-        Page<Catalog> catalogPage2 = catalogPaginationRepository.findAll(pageable2);
+        List<Catalog> catalogPage2 = catalogPaginationService.findAllCatalogs(pageable2);
+//        Page<Catalog> catalogPage2 = catalogPaginationRepository.findAll(pageable2);
+//        System.out.println(catalogPage2.getContent());
         Pageable pageable3 = PageRequest.of(2, 2);
-        Page<Catalog> catalogPage3 = catalogPaginationRepository.findAll(pageable3);
-        System.out.println(catalogPage1.getContent());
-        System.out.println(catalogPage2.getContent());
-        System.out.println(catalogPage3.getContent());
+        List<Catalog> catalogPage3 = catalogPaginationService.findAllCatalogs(pageable3);
+//        Page<Catalog> catalogPage3 = catalogPaginationRepository.findAll(pageable3);
+//        System.out.println(catalogPage3.getContent());
+        System.out.println("---------------Catalogs pages-----------------------");
+        System.out.println(catalogPage1);
+        System.out.println(catalogPage2);
+        System.out.println(catalogPage3);
+        System.out.println("--------------------------------------");
 
-//        Pageable pageable1 = PageRequest.of(0, 2);
-//        Page<Product> productPage1 = productPaginationRepository.findAll(pageable1);
-//        System.out.println(productPage1);
-//        Pageable pageable2 = PageRequest.of(1, 2);
-//        Page<Product> productPage2 = productPaginationRepository.findAll(pageable2);
-//        System.out.println(productPage2);
 
-        // все продукты из одного каталога.
-        List<Product> products = catalogService.findAllProductsFromCatalog("Catalog4");
-        System.out.println("Products " + products);
+        //  все  товары из одного каталога постранично.
+        Pageable pageable4 = PageRequest.of(0, 2);
+        List<Product> productPage1 = catalogPaginationService.findAllProductsFromCatalog("Catalog1", pageable4);
+        Pageable pageable5 = PageRequest.of(1, 2);
+        List<Product> productPage2 = catalogPaginationService.findAllProductsFromCatalog("Catalog1", pageable5);
+        System.out.println("--------------Products pages------------------------");
+        System.out.println(productPage1);
+        System.out.println(productPage2);
+        System.out.println("--------------------------------------");
+
+
+        // все товары из одного каталога.
+        List<Product> products = catalogService.findAllProductsFromCatalog("Catalog1");
+        System.out.println("Products ---" + products);
 
         // максимальная ценой из общего списка.
         Double maxPrice = productService.findMaxPrice();
@@ -120,33 +133,33 @@ public class MainApp {
         Double minPrice = productService.findMinPrice();
         System.out.println("MinPrice is --- " + minPrice);
 
-        // продукты с максимальной ценой определённого каталога.
+        // товары с максимальной ценой определённого каталога.
         List<Product> productListInCatalogWithMaxPrice = catalogService.findProductsInCatalogWithMaxPrice("Catalog1");
-        System.out.println("ProductListInCatalogWithMaxPrice " + productListInCatalogWithMaxPrice);
+        System.out.println("ProductListInCatalogWithMaxPrice --- " + productListInCatalogWithMaxPrice);
 
-        // продукты с минимальной ценой определённого каталога.
+        // товары с минимальной ценой определённого каталога.
         List<Product> productListInCatalogWithMinPrice = catalogService.findProductsInCatalogWithMinPrice("Catalog1");
-        System.out.println("ProductListInCatalogWithMinPrice " + productListInCatalogWithMinPrice);
+        System.out.println("ProductListInCatalogWithMinPrice --- " + productListInCatalogWithMinPrice);
 
-        // продукты с максимальной и минимальной ценой определённого каталога.
+        // товары с максимальной и минимальной ценой определённого каталога.
         List<Product> productListInCatalogWithMinAndMaxPrice = catalogService.findProductsInCatalogWithMinAndMaxPrice("Catalog1");
-        System.out.println("ProductListInCatalogWithMinAndMaxPrice " + productListInCatalogWithMinAndMaxPrice);
+        System.out.println("ProductListInCatalogWithMinAndMaxPrice --- " + productListInCatalogWithMinAndMaxPrice);
 
-        // продукты с максимальной ценой из общего списка.
+        // товары с максимальной ценой из общего списка.
         List<Product> productListWithMaxPrice = productService.findProductsByMaxPrice();
-        System.out.println("ProductListWithMaxPrice " + productListWithMaxPrice);
+        System.out.println("ProductListWithMaxPrice --- " + productListWithMaxPrice);
 
-        // продукты с минимальной ценой из общего списка.
+        // товары с минимальной ценой из общего списка.
         List<Product> productListWithMinPrice = productService.findProductsByMinPrice();
-        System.out.println("ProductListWithMinPrice " + productListWithMinPrice);
+        System.out.println("ProductListWithMinPrice --- " + productListWithMinPrice);
 
-        // продукты с указанной ценой из общего списка.
+        // товары с указанной ценой из общего списка.
         List<Product> productByPrice = productService.findProductByPriceEquals(50.0);
-        System.out.println("ProductByPrice " + productByPrice);
+        System.out.println("ProductByPrice --- " + productByPrice);
 
         // каталоги с указанным продуктом.
         List<Catalog> catalogList = catalogService.findCatalogsByProductsEquals(product3);
-        System.out.println("catalogList " + catalogList);
+        System.out.println("CatalogList --- " + catalogList);
 
 //        Double catMaxPrice = catalogService.findMaxPriceFromCatalog("Catalog1");
 //        System.out.println( "catMaxPrice --- " + catMaxPrice);
